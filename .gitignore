@@ -1,0 +1,32 @@
+# xcode
+.DS_Store
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+
+# build products
+build/
+DerivedData/
+*.o
+*.LinkFileList
+*.hmap
+
+# user-specific settings
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.pbxuser
+
+# swift package manager
+.swiftpm/
+.build/
+Packages/
+Package.pins
+Package.resolved
+
+# other
+*.swp
+*.lock
+*.idea/
+*.iml
+*.xcodeproj/project.xcworkspace/xcuserdata/

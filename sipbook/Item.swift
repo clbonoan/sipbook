@@ -2,7 +2,7 @@
 //  Item.swift
 //  sipbook
 //
-//  Created by Christine Bonoan on 9/30/25.
+//  Created on 9/30/25.
 //
 
 import Foundation
