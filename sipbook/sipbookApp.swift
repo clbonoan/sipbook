@@ -25,7 +25,7 @@ struct sipbookApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView() // title page
         }
         .modelContainer(sharedModelContainer)
     }

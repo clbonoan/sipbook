@@ -8,48 +8,64 @@
 import SwiftUI
 import SwiftData
 
+extension Color {
+    init(hex: String) {
+        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
+
+        var rgb: UInt64 = 0
+        Scanner(string: hexSanitized).scanHexInt64(&rgb)
+
+        let r, g, b, a: Double
+        switch hexSanitized.count {
+        case 6: // RGB (no alpha)
+            (r, g, b, a) = (
+                Double((rgb >> 16) & 0xFF) / 255,
+                Double((rgb >> 8) & 0xFF) / 255,
+                Double(rgb & 0xFF) / 255,
+                1.0
+            )
+        case 8: // RGBA
+            (r, g, b, a) = (
+                Double((rgb >> 24) & 0xFF) / 255,
+                Double((rgb >> 16) & 0xFF) / 255,
+                Double((rgb >> 8) & 0xFF) / 255,
+                Double(rgb & 0xFF) / 255
+            )
+        default:
+            (r, g, b, a) = (1, 1, 1, 1) // fallback white
+        }
+
+        self.init(.sRGB, red: r, green: g, blue: b, opacity: a)
+    }
+}
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
 
+    // TITLE PAGE
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+        NavigationStack {
+            ZStack {
+                Color(hex: "#333131")
+                    .ignoresSafeArea()
+                VStack(spacing: 40) {
+                    Text("Sip Book")
+                        .font(.system(size: 56, weight: .bold, design: .rounded))
+                        .foregroundColor(Color(hex: "#F2E6D4"))
+                        .navigationBarBackButtonHidden(true)
+                    NavigationLink(destination: AppTabsView()) {
+                        Text("Get Started")
+                            .font(.title2.bold())
+                            .padding(.vertical, 14)
+                            .padding(.horizontal, 20)
+                            .background(Color(hex: "#F2E6D4"))
+                            .foregroundColor(Color(hex: "#333131"))
+                            .cornerRadius(10)
+                            
                     }
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
             }
         }
     }
