@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+// to use hex codes for colors
 extension Color {
     init(hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)

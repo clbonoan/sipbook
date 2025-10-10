@@ -15,6 +15,7 @@ struct SavedCreationsView: View {
             Color(hex: "#333131")
                 .ignoresSafeArea()
         }
+        
     }
 }
 
