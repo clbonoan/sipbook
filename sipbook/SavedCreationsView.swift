@@ -12,8 +12,9 @@ struct SavedCreationsView: View {
     // SAVED CREATIONS PAGE
     var body: some View {
         ZStack {
-            Color(hex: "#333131")
+            Color(hex: "#282728")
                 .ignoresSafeArea()
+            
         }
         
     }

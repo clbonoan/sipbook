@@ -49,20 +49,20 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "#333131")
+                Color(hex: "#282728")
                     .ignoresSafeArea()
                 VStack(spacing: 40) {
                     Text("Sip Book")
                         .font(.system(size: 56, weight: .bold, design: .rounded))
-                        .foregroundColor(Color(hex: "#F2E6D4"))
+                        .foregroundColor(Color(hex: "#F8FAFA"))
                         .navigationBarBackButtonHidden(true)
                     NavigationLink(destination: AppTabsView()) {
                         Text("Get Started")
                             .font(.title2.bold())
                             .padding(.vertical, 14)
                             .padding(.horizontal, 20)
-                            .background(Color(hex: "#F2E6D4"))
-                            .foregroundColor(Color(hex: "#333131"))
+                            .background(Color(hex: "#F8FAFA"))
+                            .foregroundColor(Color(hex: "#282728"))
                             .cornerRadius(10)
                             
                     }

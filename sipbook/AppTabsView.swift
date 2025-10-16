@@ -21,7 +21,7 @@ struct AppTabsView: View {
             NavigationStack { SettingsView() }
                 .tabItem { Label("Settings", systemImage: "gearshape.fill") }
         }
-        .tint(Color(hex: "#333131"))
+        .tint(Color(hex: "#4F5052"))
         .navigationBarBackButtonHidden(true)
     }
 }
