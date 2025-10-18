@@ -10,6 +10,11 @@ import SwiftData
 
 @main
 struct sipbookApp: App {
+    //init() {
+    //    let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_NINJAS_KEY") as? String ?? "Missing"
+    //    print("Loaded API Key:", apiKey)
+    //}
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,

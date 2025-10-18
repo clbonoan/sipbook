@@ -24,6 +24,9 @@ Packages/
 Package.pins
 Package.resolved
 
+# ignore Info.plist wiht sensitive data
+sipbook/Info.plist
+
 # other
 *.swp
 *.lock
