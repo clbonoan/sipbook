@@ -115,7 +115,6 @@ struct CustomizeView: View {
                 rimGarnishSection
                 notesSection
                 
-                
                 // section to add save button at bottom of form
                 Section {
                     HStack {
@@ -132,6 +131,8 @@ struct CustomizeView: View {
                     }
                 }
             }
+            // give a stable id so Swift doesn't think it's a new instance every time a specific customization is made
+            .id(preset.id)
             .scrollContentBackground(.hidden)
             .background(.clear)
             // tracks changes in item selections
@@ -458,7 +459,7 @@ private extension CustomizeView {
 
 // reusable mock for previews
 extension PresetDrink {
-    static let preview = PresetDrink(name: "Margarita", kind: .cocktail)
+    static let preview = PresetDrink(name: "Margarita", kind: .cocktail, imageName: "margarita")
 }
 
 #Preview {

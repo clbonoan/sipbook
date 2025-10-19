@@ -22,6 +22,7 @@ struct PresetDrink: Identifiable, Hashable {
     let name: String
     let kind: DrinkKind
     //let ingredients: [String]?
+    let imageName: String?
     
 }
 
@@ -37,16 +38,16 @@ struct PresetDrinksView: View {
     
     // presets
     private let allPresets: [PresetDrink] = [
-        .init(name: "Margarita", kind: .cocktail),
-        .init(name: "Mojito", kind: .cocktail),
-        .init(name: "Moscow Mule", kind: .cocktail),
-        .init(name: "Martini", kind: .cocktail),
-        .init(name: "Whiskey Sour", kind: .cocktail),
-        .init(name: "Daiquiri", kind: .cocktail),
-        .init(name: "Shirley Temple", kind: .mocktail),
-        .init(name: "Arnold Palmer", kind: .mocktail),
-        .init(name: "Virgin Margarita", kind: .mocktail),
-        .init(name: "Virgin Mojito", kind: .mocktail),
+        .init(name: "Margarita", kind: .cocktail, imageName: "margarita"),
+        .init(name: "Mojito", kind: .cocktail, imageName: "mojito"),
+        .init(name: "Moscow Mule", kind: .cocktail, imageName: "moscowmule"),
+        .init(name: "Martini", kind: .cocktail, imageName: "martini"),
+        .init(name: "Whiskey Sour", kind: .cocktail, imageName: "whiskeysour"),
+        .init(name: "Daiquiri", kind: .cocktail, imageName: "daiquiri"),
+        .init(name: "Shirley Temple", kind: .mocktail, imageName: "shirleytemple"),
+        .init(name: "Arnold Palmer", kind: .mocktail, imageName: "arnoldpalmer"),
+        .init(name: "Virgin Margarita", kind: .mocktail, imageName: "virginmarg"),
+        .init(name: "Virgin Mojito", kind: .mocktail, imageName: "virginmoj"),
     ]
     
     // filter preset drinks based on category Cocktail or Mocktail
@@ -113,6 +114,9 @@ struct PresetDrinksView: View {
                                 // go to customization view when drink preset is clicked
                                 CustomizeView(preset: preset)
                             } label: {
+                                // put image drink on top
+                                PresetCardView(preset: preset)
+                                /*
                                 VStack(spacing: 10) {
                                     Text(preset.name)
                                          .font(.headline)
@@ -125,27 +129,11 @@ struct PresetDrinksView: View {
                                 .padding()
                                 .background(Color.white.opacity(0.08))
                                 .cornerRadius(10)
+                                 */
                             }
                         
                         }
                     }
-                    
-                    /*LazyVGrid(
-                        columns: [
-                            GridItem(.flexible(minimum: 50, maximum: .infinity), spacing: 20),
-                            GridItem(.flexible(minimum: 50, maximum: .infinity)),
-                        ],
-                        alignment: .leading,
-                        spacing: 20
-                    ) {
-                        ForEach(0..<8, id:\.self) { column in
-                            Text("\(column)")
-                                .frame(height: 200)
-                                .frame(maxWidth: .infinity)
-                                .background(Color(hex: "#818283"))
-                                
-                        }
-                    }.padding(25)*/
                     .padding(.horizontal, 15)
                 }
             }
