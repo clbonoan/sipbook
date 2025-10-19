@@ -55,9 +55,13 @@ struct PresetDrinksView: View {
         // show only drinks based on category toggled
         let base = allPresets.filter {$0.kind == selectedKind}
         let q = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !q.isEmpty else { return base }
-        // make filtered list based on case insensitive search
-        return base.filter { $0.name.localizedCaseInsensitiveContains(q)}
+        guard !q.isEmpty else {
+            return base
+        }
+        // make filtered list based on the first letter of word; case insensitive
+        return base.filter {
+            $0.name.lowercased().hasPrefix(q.lowercased())
+        }
     }
     
     // HOME PAGE
