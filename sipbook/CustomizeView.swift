@@ -8,6 +8,7 @@
 //  Show original recipe from Cocktail API
 
 import SwiftUI
+import SwiftData
 
 // add enums for pickers
 enum Spirit: String, CaseIterable, Identifiable {
@@ -43,6 +44,9 @@ enum Rim: String, CaseIterable, Identifiable {
 
 // MAIN VIEW
 struct CustomizeView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+
     let preset: PresetDrink
     
     // for API data
@@ -52,6 +56,8 @@ struct CustomizeView: View {
     
     @State private var customName: String = ""
     @State private var notes: String = ""
+    @State private var showSaveAlert = false
+    @State private var alertMessage = ""
     
     // number of shots and base
     @State private var shots: Int = 1
@@ -109,6 +115,7 @@ struct CustomizeView: View {
                 rimGarnishSection
                 notesSection
                 
+                
                 // section to add save button at bottom of form
                 Section {
                     HStack {
@@ -116,7 +123,7 @@ struct CustomizeView: View {
                         Button {
                             saveDrink()
                         } label: {
-                            Label("Save", systemImage: "tray.and.arrow.down.fill")
+                            Label("Save", systemImage: "plus.circle.fill")
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .font(.headline)
                                 .foregroundColor(Color(hex: "#0D0E10"))
@@ -146,6 +153,15 @@ struct CustomizeView: View {
             syncPartsWithMixer()
             syncPartsWithLiqueur()
         }
+        // set up alert pop up when drink is saved
+        .alert("Save Drink", isPresented: $showSaveAlert) {
+            Button("OK") {
+                // bring user back to preset drink page after saving
+                dismiss()
+            }
+        } message: {
+            Text(alertMessage)
+        }
     }
 }
 
@@ -164,7 +180,6 @@ private extension CustomizeView {
     
     var originalRecipeSection: some View {
         Section {
-                
                 // check if API is loading data for cocktail or mocktail
                 if preset.kind != .cocktail {
                     Text("Mocktail selected - skipping API")
@@ -239,7 +254,7 @@ private extension CustomizeView {
     }
     
     var liqueursSection: some View {
-        // LIQUEURS (show for cocktails only) SECTION
+        // LIQUEURS SECTION (show for cocktails only)
         Section(header: Text("Liqueurs")
             .foregroundColor(Color(hex: "#F8FAFA"))) {
                 AddablePicker(
@@ -276,6 +291,7 @@ private extension CustomizeView {
     }
     
     var notesSection: some View {
+        // NOTES SECTION
         Section(header: Text("Notes")
             .foregroundColor(Color(hex: "#F8FAFA"))) {
                 VStack {
@@ -283,6 +299,7 @@ private extension CustomizeView {
                 }
         }
     }
+    
 }
 
 
@@ -366,7 +383,39 @@ private extension CustomizeView {
     
     // function to save customized drink
     func saveDrink () {
+        // validate custom name
+        let finalName = customName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            ? preset.name
+            : customName
         
+        // create model from current UI state
+        let drink = SavedDrink(
+            name: finalName,
+            kindRaw: preset.kind.rawValue,  // string value
+            notes: notes,
+            spirits: Array(selectedSpirits.sorted()),
+            shotsPerSpirit: shotsPerSpirit,
+            naBases: Array(selectedBases.sorted()),
+            partsPerBase: partsPerBase,
+            mixers: Array(selectedMixers.sorted()),
+            partsPerMixer: partsPerMixer,
+            liqueurs: Array(selectedLiqueurs.sorted()),
+            partsPerLiqueur: partsPerLiqueur,
+            rim: rim.rawValue,  // string value
+            garnishes: Array(selectedGarnishes.sorted()),
+            createdAt: Date(),
+            updatedAt: Date()
+        )
+        
+        modelContext.insert(drink)
+        do {
+            try modelContext.save()
+            alertMessage = "Your custom drink \"\(finalName)\" was saved!"
+            showSaveAlert = true
+        } catch {
+            alertMessage = "Failed to save: \(error.localizedDescription)"
+            showSaveAlert = true
+        }
     }
     
     // function for loading data from Cocktail API

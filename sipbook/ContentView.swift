@@ -43,7 +43,8 @@ extension Color {
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query(sort: \SavedDrink.updatedAt, order: .reverse)
+    private var drinks: [SavedDrink]
 
     // TITLE PAGE
     var body: some View {
@@ -74,5 +75,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: SavedDrink.self, inMemory: true)
 }
