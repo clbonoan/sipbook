@@ -338,56 +338,47 @@ private extension CustomizeView {
     
     // function to align selected spirits with shot counters
     func syncShotsWithSelection() {
-        // prevent autoscroll when updating the dictionaries
-        DispatchQueue.main.async {
-            // add defaults for selected spirits
-            for s in selectedSpirits where shotsPerSpirit[s] == nil {
-                shotsPerSpirit[s] = 1
-            }
-            // remove entries for deselected spirits
-            for key in shotsPerSpirit.keys where !selectedSpirits.contains(key) {
-                shotsPerSpirit.removeValue(forKey: key)
-            }
+        // add defaults for selected spirits
+        for s in selectedSpirits where shotsPerSpirit[s] == nil {
+            shotsPerSpirit[s] = 1
+        }
+        // remove entries for deselected spirits
+        for key in shotsPerSpirit.keys where !selectedSpirits.contains(key) {
+            shotsPerSpirit.removeValue(forKey: key)
         }
     }
 
     // functions to align selected mixers, liqueurs, NA base with part counters
     func syncPartsWithBase() {
         // add defaults for selected bases
-        DispatchQueue.main.async {
-            for p in selectedBases where partsPerBase[p] == nil {
-                partsPerBase[p] = 1
-            }
-            
-            for key in partsPerBase.keys where !selectedBases.contains(key) {
-                partsPerBase.removeValue(forKey: key)
-            }
+        for p in selectedBases where partsPerBase[p] == nil {
+            partsPerBase[p] = 1
+        }
+        
+        for key in partsPerBase.keys where !selectedBases.contains(key) {
+            partsPerBase.removeValue(forKey: key)
         }
     }
     
     func syncPartsWithMixer() {
         // add defaults for selected mixers
-        DispatchQueue.main.async {
-            for p in selectedMixers where partsPerMixer[p] == nil {
-                partsPerMixer[p] = 1
-            }
-            
-            for key in partsPerMixer.keys where !selectedMixers.contains(key) {
-                partsPerMixer.removeValue(forKey: key)
-            }
+        for p in selectedMixers where partsPerMixer[p] == nil {
+            partsPerMixer[p] = 1
+        }
+        
+        for key in partsPerMixer.keys where !selectedMixers.contains(key) {
+            partsPerMixer.removeValue(forKey: key)
         }
     }
     
     func syncPartsWithLiqueur() {
         // add defaults for selected liqueurs
-        DispatchQueue.main.async {
-            for p in selectedLiqueurs where partsPerLiqueur[p] == nil {
-                partsPerLiqueur[p] = 1
-            }
-            
-            for key in partsPerLiqueur.keys where !selectedLiqueurs.contains(key) {
-                partsPerLiqueur.removeValue(forKey: key)
-            }
+        for p in selectedLiqueurs where partsPerLiqueur[p] == nil {
+            partsPerLiqueur[p] = 1
+        }
+        
+        for key in partsPerLiqueur.keys where !selectedLiqueurs.contains(key) {
+            partsPerLiqueur.removeValue(forKey: key)
         }
     }
     
