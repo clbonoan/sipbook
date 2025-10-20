@@ -169,7 +169,6 @@ struct CustomizeView: View {
 
 // split sections for fast type-checking
 private extension CustomizeView {
-    
     var nameSection: some View {
         Section {
             TextField("Drink name", text: $customName)

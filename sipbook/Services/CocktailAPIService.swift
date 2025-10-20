@@ -28,7 +28,7 @@ enum CocktailAPIError: Error, LocalizedError {
             // key setup error
             "missing API_NINJAS_KEY"
         case .badURL: 
-            // correct URL
+            // incorrect URL
             "invalid request URL"
         case .http(let c): 
             // status code returns
