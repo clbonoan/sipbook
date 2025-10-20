@@ -3,7 +3,8 @@
 //  sipbook
 //
 //  Created by Christine Bonoan on 10/5/25.
-//
+//  This has all the options in the tab bar.
+
 import SwiftUI
 
 struct AppTabsView: View {
@@ -21,7 +22,7 @@ struct AppTabsView: View {
             NavigationStack { SettingsView() }
                 .tabItem { Label("Settings", systemImage: "gearshape.fill") }
         }
-        .tint(Color(hex: "#4F5052"))
+        .tint(Color(hex: "#C5C6C8"))
         .navigationBarBackButtonHidden(true)
     }
 }

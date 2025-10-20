@@ -48,7 +48,7 @@ struct SavedCreationsView: View {
                     .listRowBackground(Color.clear)
                 }
             }
-            .navigationTitle("Saved Creations")
+            //.navigationTitle("Saved Creations")
             .navigationDestination(for: SavedDrink.self) { drink in
                 SavedDrinkDetailView(drink: drink)
             }

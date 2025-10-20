@@ -64,11 +64,9 @@ struct CustomizeView: View {
     @State private var spiritOptions: [String] = [
         "Vodka", "Gin", "Rum", "Tequila", "Whiskey"
     ]
-    //@State private var spiritChoice: String = "Tequila"
     @State private var naBaseOptions: [String] = [
         "Soda Water", "Tonic", "Ginger Beer", "Lemonade", "Iced Tea", "Juice"
     ]
-    //@State private var naBaseChoice: String = "Soda Water"
     
     // mixers, liqueurs, garnishes
     @State private var mixerOptions: [String] = [
@@ -109,9 +107,10 @@ struct CustomizeView: View {
                 // separated sections by private extensions
                 nameSection
                 originalRecipeSection
+                typeToggleSelection
                 baseSection
                 mixersSection
-                if preset.kind == .cocktail {
+                if isCocktail {
                     liqueursSection
                 }
                 rimGarnishSection
@@ -150,6 +149,7 @@ struct CustomizeView: View {
         .navigationTitle(preset.name)
         .navigationBarTitleDisplayMode(.inline)
         .task {
+            isCocktail = (preset.kind == .cocktail)
             await loadOnce()
             syncShotsWithSelection()
             syncPartsWithBase()
@@ -207,11 +207,21 @@ private extension CustomizeView {
             }
     }
     
+    var typeToggleSelection: some View {
+        Section {
+            Toggle(isOn: $isCocktail) {
+                Label(isCocktail ? "Cocktail" : "Mocktail", systemImage: isCocktail ? "wineglass" : "mug")
+                    .foregroundColor(Color(hex: "#0D0E10"))
+            }
+        }
+    }
+    
     var baseSection: some View {
         // BASE SECTION
         Section(header: Text("Base")
             .foregroundColor(Color(hex: "#F8FAFA"))) {
-                if preset.kind == .cocktail {
+                //if preset.kind == .cocktail {
+                if isCocktail {
                     AddablePicker(
                         title: "Spirit",
                         selections: $selectedSpirits,
@@ -313,7 +323,9 @@ private extension CustomizeView {
     // functions to bind selected item names to shot/part counter
     func bindingForSpiritShots(_ spirit: String) -> Binding<Int> {
         Binding(
+            // read the value
             get: { shotsPerSpirit[spirit] ?? 1 },
+            // write/update the value in the dictionary
             set: { newVal in shotsPerSpirit[spirit] = newVal }
         )
     }
@@ -404,7 +416,7 @@ private extension CustomizeView {
         // create model from current UI state
         let drink = SavedDrink(
             name: finalName,
-            kindRaw: preset.kind.rawValue,  // string value
+            kindRaw: isCocktail ? "cocktail" : "mocktail",  // reflect toggle choice
             notes: notes,
             spirits: Array(selectedSpirits.sorted()),
             shotsPerSpirit: shotsPerSpirit,

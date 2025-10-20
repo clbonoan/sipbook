@@ -3,7 +3,7 @@
 //  sipbook
 //
 //  Created on 9/30/25.
-//
+//  This is the main title page before going to preset drinks view.
 
 import SwiftUI
 import SwiftData
@@ -52,11 +52,14 @@ struct ContentView: View {
             ZStack {
                 Color(hex: "#282728")
                     .ignoresSafeArea()
-                VStack(spacing: 40) {
+                VStack {
                     Text("Sip Book")
-                        .font(.system(size: 56, weight: .bold, design: .rounded))
+                        .font(.system(size: 70, weight: .bold, design: .rounded))
                         .foregroundColor(Color(hex: "#F8FAFA"))
                         .navigationBarBackButtonHidden(true)
+                        .padding(.bottom, -60)
+                    Image("drinkoutline")
+                    // after clicking get started, show nav bar
                     NavigationLink(destination: AppTabsView()) {
                         Text("Get Started")
                             .font(.title2.bold())
