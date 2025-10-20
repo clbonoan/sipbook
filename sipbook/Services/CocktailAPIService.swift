@@ -3,11 +3,11 @@
 //  sipbook
 //
 //  Created by Christine Bonoan on 10/17/25.
-//  This model gives us what data we need from the API
+//  This gives us what data we need from the API for the cocktail ingredients
 
 import Foundation
 
-struct CocktailAPIModel: Codable, Hashable {
+struct CocktailAPIService: Codable, Hashable {
     let name: String
     let ingredients: [String]
 }
@@ -54,7 +54,7 @@ final class CocktailService {
     }
     
     // search for cocktail by name using API
-    func searchByName(_ name: String) async throws -> [CocktailAPIModel] {
+    func searchByName(_ name: String) async throws -> [CocktailAPIService] {
         // check if API key exists
         guard !apiKey.isEmpty else { throw CocktailAPIError.missingKey }
         
@@ -81,9 +81,9 @@ final class CocktailService {
             throw CocktailAPIError.http(http.statusCode)
         }
         
-        // decode JSON into CocktailAPIModel
+        // decode JSON into CocktailAPIService
         do {
-            return try JSONDecoder().decode([CocktailAPIModel].self, from: data)
+            return try JSONDecoder().decode([CocktailAPIService].self, from: data)
         } catch {
             throw CocktailAPIError.decode(error)
         }

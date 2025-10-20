@@ -1,0 +1,38 @@
+[
+    {
+        "name": "shirley temple",
+        "ingredients": [
+            "6 oz ginger ale or lemon-lime soda",
+            "0.5 oz grenadine",
+            "maraschino cherry"
+        ]
+    },
+    {
+        "name": "arnold palmer",
+        "ingredients": [
+            "3 oz lemonade",
+            "3 oz iced tea",
+            "lemon slice for garnish",
+        ]
+    },
+    {
+        "name": "virgin margarita",
+        "ingredients": [
+            "1.5 oz lime juice",
+            "1 oz orange juice",
+            "0.5 oz simple syrup",
+            "2 oz club soda or sparkling water",
+            "salt rim",
+            "lime wedge for garnish"
+        ]
+    },
+    {
+        "name": "virgin mojito",
+        "ingredients": [
+            "1 sprig of mint",
+            "1 oz lime juice",
+            "0.5 oz simple syrup",
+            "soda water"
+        ]
+    }
+]

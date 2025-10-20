@@ -96,6 +96,8 @@ struct CustomizeView: View {
     // single picker for rim
     @State private var rim: Rim = .none
 
+    // boolean for whether creation is a cocktail or mocktail
+    @State private var isCocktail: Bool = true
     
     // CUSTOMIZING PAGE
     var body: some View {
@@ -135,7 +137,7 @@ struct CustomizeView: View {
             .id(preset.id)
             .scrollContentBackground(.hidden)
             .background(.clear)
-            // tracks changes in item selections
+            // onChange tracks changes in item selections
             .onChange(of: selectedSpirits, initial: false) { oldValue, newValue in syncShotsWithSelection()
             }
             .onChange(of: selectedBases, initial: false) { oldValue, newValue in syncPartsWithBase()
@@ -181,10 +183,12 @@ private extension CustomizeView {
     var originalRecipeSection: some View {
         Section {
                 // check if API is loading data for cocktail or mocktail
+                /*
                 if preset.kind != .cocktail {
                     Text("Mocktail selected - skipping API")
                         .foregroundStyle(.secondary)
-                } else if isLoading {
+                }*/
+                if isLoading {
                     ProgressView("Loading...")
                 } else if let err = errorMessage {
                     Text("Error: \(err)")
@@ -430,11 +434,11 @@ private extension CustomizeView {
     // function for loading data from Cocktail API
     func loadOnce() async {
         // only fetch data for cocktails
-        guard preset.kind == .cocktail else {
+        /*guard preset.kind == .cocktail else {
             errorMessage = "Skipping API (mocktail)"
             return
-        }
-        // don't refetch if already loaded
+        }*/
+        // don't refetch if data is already loaded
         guard !isLoading && ingredients.isEmpty else { return }
 
         isLoading = true
@@ -442,21 +446,37 @@ private extension CustomizeView {
         errorMessage = nil
 
         do {
-            let results = try await CocktailService.shared.searchByName(preset.name)
-    
-            // try exact name match first or take first result
-            let best = results.first {
-                $0.name.compare(preset.name, options: .caseInsensitive) == .orderedSame
-            } ?? results.first
-    
-            if let best {
-                ingredients = best.ingredients
-        
-                // print to console for debugging
-                //print("API OK for \(preset.name)")
-                //print("Ingredients:", best.ingredients)
+            if preset.kind == .cocktail {
+                // API for cocktails
+                let results = try await CocktailService.shared.searchByName(preset.name)
+                
+                // try exact name match first or take first result
+                let best = results.first {
+                    $0.name.compare(preset.name, options: .caseInsensitive) == .orderedSame
+                } ?? results.first
+                
+                if let best {
+                    ingredients = best.ingredients
+                    
+                    // print to console for debugging
+                    //print("API OK for \(preset.name)")
+                    //print("Ingredients:", best.ingredients)
+                } else {
+                    errorMessage = "No recipe found from API"
+                }
             } else {
-                errorMessage = "No recipe found from API"
+                // JSON for mocktails
+                let results = try await MocktailService.shared.searchByName(preset.name)
+                
+                let best = results.first {
+                    $0.name.compare(preset.name, options: .caseInsensitive) == .orderedSame
+                } ?? results.first
+                
+                if let best {
+                    ingredients = best.ingredients
+                } else {
+                    errorMessage = "No mocktail found in mocktails.json"
+                }
             }
         } catch {
             errorMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
@@ -465,7 +485,7 @@ private extension CustomizeView {
     }
 }
 
-// reusable mock for previews
+// reusable mock for preview
 extension PresetDrink {
     static let preview = PresetDrink(name: "Margarita", kind: .cocktail, imageName: "margarita")
 }
