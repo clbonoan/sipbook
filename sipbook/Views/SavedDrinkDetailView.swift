@@ -42,6 +42,7 @@ struct SavedDrinkDetailView: View {
         case salt = "Salt Rim"
         case sugar = "Sugar Rim"
         case tajin = "Tajin Rim"
+        case tajinchamoy = "Tajin and Chamoy Rim"
         var id: String {rawValue}
     }
     

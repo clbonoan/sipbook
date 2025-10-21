@@ -46,6 +46,8 @@ struct ContentView: View {
     @Query(sort: \SavedDrink.updatedAt, order: .reverse)
     private var drinks: [SavedDrink]
 
+    @State private var moveRight = false
+    
     // TITLE PAGE
     var body: some View {
         NavigationStack {
@@ -59,6 +61,24 @@ struct ContentView: View {
                         .navigationBarBackButtonHidden(true)
                         .padding(.bottom, -60)
                     Image("drinkoutline")
+                        .padding(.bottom, 10)
+                        
+                        // adding animation to image
+                        // move image right then back again
+                        .offset(x: moveRight ? 50 : -50)
+                        .opacity(1)
+                        // make movement resemble a train motion
+                        .animation(.easeInOut(duration:6)
+                            .repeatForever(autoreverses: true), value: moveRight)
+                        
+                        // movement of image starts when it fully appears
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                // 0.3 for slight delay before it starts moving
+                                moveRight = true
+                            }
+                        }
+                    
                     // after clicking get started, show nav bar
                     NavigationLink(destination: AppTabsView()) {
                         Text("Get Started")
