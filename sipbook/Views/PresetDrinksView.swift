@@ -21,7 +21,6 @@ struct PresetDrink: Identifiable, Hashable {
     let id = UUID()
     let name: String
     let kind: DrinkKind
-    //let ingredients: [String]?
     let imageName: String?
     
 }

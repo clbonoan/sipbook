@@ -19,7 +19,7 @@ final class SavedDrink {
     var naBases: [String]
     var mixers: [String]
     var liqueurs: [String]
-    var rim: String
+    var rim: [String]
     var garnishes: [String]
     
     var shotsPerSpirit: [String: Int]
@@ -43,7 +43,7 @@ final class SavedDrink {
         partsPerMixer: [String:Int] = [:],
         liqueurs: [String] = [],
         partsPerLiqueur: [String:Int] = [:],
-        rim: String = "None",
+        rim: [String] = [],
         garnishes: [String] = [],
         createdAt: Date = .now,
         updatedAt: Date = .now

@@ -38,6 +38,7 @@ enum Rim: String, CaseIterable, Identifiable {
     case salt = "Salt Rim"
     case sugar = "Sugar Rim"
     case tajin = "Tajin Rim"
+    case chamoy = "Chamoy Rim"
     var id: String {rawValue}
     var label: String {rawValue}
 }
@@ -68,12 +69,15 @@ struct CustomizeView: View {
         "Soda Water", "Tonic", "Ginger Beer", "Lemonade", "Iced Tea", "Juice"
     ]
     
-    // mixers, liqueurs, garnishes
+    // mixers, liqueurs, rims, garnishes
     @State private var mixerOptions: [String] = [
         "Lime Juice", "Lemon Juice", "Simple Syrup", "Pineapple", "Orange", "Cranberry"
     ]
     @State private var liqueurOptions: [String] = [
         "Triple Sec", "Aperol", "Amaretto", "Midori", "Peach Schnapps", "Coffee Liqueur"
+    ]
+    @State private var rimOptions: [String] = [
+        "None", "Salt Rim", "Sugar Rim", "Tajin Rim", "Chamoy Rim"
     ]
     @State private var garnishOptions: [String] = [
         "Lime", "Lemon Twist", "Lime/Lemon Wedge", "Orange Peel", "Mint", "Cherry"
@@ -89,10 +93,11 @@ struct CustomizeView: View {
     @State private var partsPerLiqueur: [String: Int] = [:]
     @State private var selectedMixers: Set<String> = []
     @State private var selectedLiqueurs: Set<String> = []
+    @State private var selectedRim: Set<String> = []
     @State private var selectedGarnishes: Set<String> = []
     
     // single picker for rim
-    @State private var rim: Rim = .none
+    //@State private var rim: Rim = .none
 
     // boolean for whether creation is a cocktail or mocktail
     @State private var isCocktail: Bool = true
@@ -290,11 +295,12 @@ private extension CustomizeView {
         // RIMS and GARNISHES SECTION
         Section(header: Text("Rim & Garnish")
             .foregroundColor(Color(hex: "#F8FAFA"))) {
-                Picker("Rim", selection: $rim) {
-                    ForEach(Rim.allCases) { r in
-                        Text(r.rawValue).tag(r)
-                    }
-                }
+                AddablePicker(
+                    title: "Rim",
+                    selections: $selectedRim,
+                    options: $rimOptions
+                )
+                .foregroundStyle(Color(hex: "#0D0E10"))
                 AddablePicker(
                     title: "Garnishes",
                     selections: $selectedGarnishes,
@@ -426,7 +432,8 @@ private extension CustomizeView {
             partsPerMixer: partsPerMixer,
             liqueurs: Array(selectedLiqueurs.sorted()),
             partsPerLiqueur: partsPerLiqueur,
-            rim: rim.rawValue,  // string value
+            //rim: String = "None",
+            rim: Array(selectedRim.sorted()),
             garnishes: Array(selectedGarnishes.sorted()),
             createdAt: Date(),
             updatedAt: Date()
