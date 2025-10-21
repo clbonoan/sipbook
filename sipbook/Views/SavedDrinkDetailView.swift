@@ -32,21 +32,18 @@ struct SavedDrinkDetailView: View {
     @State private var liqueurOptions: [String] = [
         "Triple Sec", "Aperol", "Amaretto", "Midori", "Peach Schnapps", "Coffee Liqueur"
     ]
-    @State private var rimOptions: [String] = [
-        "None", "Salt Rim", "Sugar Rim", "Tajin Rim", "Chamoy Rim"
-    ]
     @State private var garnishOptions: [String] = [
         "Lime", "Lemon Twist", "Lime/Lemon Wedge", "Orange Peel", "Mint", "Cherry"
     ]
     
-    /*// enum for rim (SwiftData model stores it as String)
+    // enum for rim (SwiftData model stores it as String)
     enum Rim: String, CaseIterable, Identifiable {
         case none = "None"
         case salt = "Salt Rim"
         case sugar = "Sugar Rim"
         case tajin = "Tajin Rim"
         var id: String {rawValue}
-    }*/
+    }
     
     var isCocktail: Bool {
         drink.kindRaw.lowercased() == "cocktail"
@@ -269,14 +266,14 @@ private extension SavedDrinkDetailView {
         Section(header: Text("Rim & Garnish")
             .foregroundColor(Color(hex: "#F8FAFA")))  {
             if isEditing {
-                AddablePicker(
-                    title: "Rim",
-                    selections: Binding (
-                        get: { Set(drink.rim) },
-                        set: { drink.rim = Array($0).sorted() }
-                    ),
-                    options: $rimOptions
-                )
+                Picker("Rim", selection: Binding (
+                    get: { Rim(rawValue: drink.rim) ?? .none } ,
+                    set: { drink.rim = $0.rawValue }
+            
+                )) {
+                    ForEach(Rim.allCases) { r in Text(r.rawValue).tag(r) }
+                }
+                .pickerStyle(.menu)
                 .foregroundColor(Color(hex: "#0D0E10"))
                 
                 AddablePicker(
@@ -289,15 +286,7 @@ private extension SavedDrinkDetailView {
                 )
                 .foregroundColor(Color(hex: "#0D0E10"))
             } else {
-                //Text("Rim: \(drink.rim)")
-                if !drink.rim.isEmpty {
-                    Text("Rim: " + drink.rim.joined(separator: ", "))
-                        .foregroundColor(Color(hex: "#0D0E10"))
-                } else {
-                    Text("No rim")
-                        .foregroundStyle(.secondary)
-                        .foregroundColor(Color(hex: "#0D0E10"))
-                }
+                Text("Rim: \(drink.rim)")
                 
                 if !drink.garnishes.isEmpty {
                     Text("Garnishes: " + drink.garnishes.joined(separator: ", "))
