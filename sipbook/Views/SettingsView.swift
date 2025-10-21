@@ -11,6 +11,7 @@ import SwiftData
 struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var showConfirmed = false
+    @State private var showSuccess = false
     @State private var deletedCount = 0
     
     // SETTINGS PAGE
@@ -34,6 +35,7 @@ struct SettingsView: View {
             .background(.clear)
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
+            
             // show alert for deleting data
             .alert("Clear all saved data?", isPresented: $showConfirmed) {
                 Button("Cancel", role: .cancel) { }
@@ -43,8 +45,9 @@ struct SettingsView: View {
             } message: {
                 Text("This will permanently delete all your saved creations")
             }
+            
             // show alert that data was deleted
-            .alert("Successfully Deleted", isPresented: $showConfirmed) {
+            .alert("Successfully Deleted", isPresented: $showSuccess) {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text("Deleted \(deletedCount) creation\(deletedCount == 1 ? "" : "s")")
@@ -69,9 +72,9 @@ struct SettingsView: View {
             try modelContext.save()
             
             // alert that drinks were deleted
-            showConfirmed = true
+            showSuccess = true
             // debug
-            print("All saved data cleared")
+            // print("All saved data cleared")
         } catch {
             print("Failed to clear data: \(error.localizedDescription)")
         }
