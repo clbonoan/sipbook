@@ -43,6 +43,8 @@ struct PresetDrinksView: View {
         .init(name: "Martini", kind: .cocktail, imageName: "martini"),
         .init(name: "Whiskey Sour", kind: .cocktail, imageName: "whiskeysour"),
         .init(name: "Daiquiri", kind: .cocktail, imageName: "daiquiri"),
+        .init(name: "Old Fashioned", kind: .cocktail, imageName: "oldfashioned"),
+        .init(name: "Cosmopolitan", kind: .cocktail, imageName: "cosmo"),
         .init(name: "Shirley Temple", kind: .mocktail, imageName: "shirleytemple"),
         .init(name: "Arnold Palmer", kind: .mocktail, imageName: "arnoldpalmer"),
         .init(name: "Virgin Margarita", kind: .mocktail, imageName: "virginmarg"),
