@@ -72,7 +72,7 @@ struct PresetDrinksView: View {
             ScrollView {
                 VStack {
                     Spacer()
-                    Text("What drink will you make today?")
+                    Text("What will you mix today?")
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .foregroundColor(Color(hex: "#F8FAFA"))
                     Spacer()
