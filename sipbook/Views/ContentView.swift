@@ -44,7 +44,9 @@ extension Color {
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \SavedDrink.updatedAt, order: .reverse)
+    
     private var drinks: [SavedDrink]
+  
     @State private var moveRight = false
     
     // TITLE PAGE
@@ -61,19 +63,24 @@ struct ContentView: View {
                         .padding(.bottom, -60)
                     //The Add on
                     Image("drinkoutline")
-                        .padding(.bottom, -60)
-                        .offset(x: moveRight ? 50 : -50)//moves right then back again
-                        .opacity(1)
-                         //wanted the movement to resemeble train motion
-                        .animation(.easeInOut(duration:6).repeatForever(autoreverses:true),value: moveRight)
+                        .padding(.bottom, 10)
                         
-                        .onAppear{
-        //This makes sure the movment starts when photo fully appears- had a stimulation freeze
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3){
-                            //0.3 gives it a slight delay before it starts
+                        // adding animation to image
+                        // move image right then back again
+                        .offset(x: moveRight ? 50 : -50)
+                        .opacity(1)
+                        // make movement resemble a train motion
+                        .animation(.easeInOut(duration:6)
+                            .repeatForever(autoreverses: true), value: moveRight)
+                        
+                        // movement of image starts when it fully appears
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                // 0.2 for slight delay before it starts moving
                                 moveRight = true
                             }
                         }
+                    
                     // after clicking get started, show nav bar
                     NavigationLink(destination: AppTabsView()) {
                         Text("Get Started")
@@ -91,6 +98,7 @@ struct ContentView: View {
         }
     }
 }
+
 #Preview {
     ContentView()
         .modelContainer(for: SavedDrink.self, inMemory: true)
