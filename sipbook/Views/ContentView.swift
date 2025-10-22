@@ -44,8 +44,9 @@ extension Color {
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \SavedDrink.updatedAt, order: .reverse)
+    
     private var drinks: [SavedDrink]
-
+  
     @State private var moveRight = false
     
     // TITLE PAGE
@@ -60,6 +61,7 @@ struct ContentView: View {
                         .foregroundColor(Color(hex: "#F8FAFA"))
                         .navigationBarBackButtonHidden(true)
                         .padding(.bottom, -60)
+                    //The Add on
                     Image("drinkoutline")
                         .padding(.bottom, 10)
                         
@@ -74,7 +76,7 @@ struct ContentView: View {
                         // movement of image starts when it fully appears
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                // 0.3 for slight delay before it starts moving
+                                // 0.2 for slight delay before it starts moving
                                 moveRight = true
                             }
                         }
@@ -88,9 +90,10 @@ struct ContentView: View {
                             .background(Color(hex: "#F8FAFA"))
                             .foregroundColor(Color(hex: "#282728"))
                             .cornerRadius(10)
-                            
+                        
                     }
                 }
+               
             }
         }
     }
