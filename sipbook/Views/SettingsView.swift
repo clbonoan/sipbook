@@ -3,7 +3,7 @@
 //  sipbook
 //
 //  Created by Christine Bonoan on 10/5/25.
-//  This is the settings page that lets user delete their saved data
+//  This is the settings page that lets user delete their saved data and/or share it
 
 import SwiftUI
 import SwiftData
@@ -23,6 +23,7 @@ struct SettingsView: View {
                 .ignoresSafeArea()
             
             Form {
+                // option to delete all saved creations
                 Section {
                     Button(role: .destructive) {
                         showConfirmed = true
@@ -32,56 +33,79 @@ struct SettingsView: View {
                             .foregroundColor(Color(hex: "#0D0E10"))
                     }
                 }
-                //The add on
+                
+                // option to share all creations
                 Section{
                     let shareMessage = drinks.map{drink -> String in
-                        var message = "\u{1F378}\(drink.name)\n"
+                        var message = "NAME: \(drink.name)\n"
+                        
                         //Base:
                         if !drink.spirits.isEmpty {
                             let baseList = drink.spirits.map { spirit in
-                                " \u{2022}\(spirit) (\(drink.shotsPerSpirit[spirit] ?? 1), shots)"
+                                let count = drink.shotsPerSpirit[spirit] ?? 1
+                                return "\(spirit) (\(shotLabel(for: count)))"
                             }.joined(separator: ", ")
-                            message += " Base: \(baseList)\n"
+                            message += "BASE: \(baseList)\n"
+                        } else {
+                            message += "BASE: None\n"
                         }
+                        
                         //Mixer:
                         if !drink.mixers.isEmpty {
                             let mixerList = drink.mixers.map { mixer in
-                                "\u{2022}\(mixer) (\(drink.partsPerMixer[mixer] ?? 1), parts)"
+                                let count = drink.partsPerMixer[mixer] ?? 1
+                                return "\(mixer) (\(partLabel(for: count)))"
                             }.joined(separator: ", ")
-                            message += " Mixer: \(mixerList)\n"
+                            message += "MIXER: \(mixerList)\n"
+                        } else {
+                            message += "MIXER: None\n"
                         }
+                        
                         //Liqueur:
                         if !drink.liqueurs.isEmpty {
                             let liqueurList = drink.liqueurs.map { liqueur in
-                                "\u{2022}\(liqueur)(\(drink.partsPerLiqueur[liqueur] ?? 1), parts)"
+                                let count = drink.partsPerLiqueur[liqueur] ?? 1
+                                return "\(liqueur) (\(partLabel(for: count)))"
                             }.joined(separator: ", ")
-                            message += " Liqueurs: \(liqueurList)\n"
-                        }
-                        //Rim & Garnishes:
-                        if !drink.garnishes.isEmpty {
-                            message += " Rim & Garnishes: \(drink.garnishes)\n"
-                        }
-                        //Notes:
-                        if !drink.notes.isEmpty {
-                            message += " Notes: \(drink.notes)\n"
+                            message += "LIQUEUR: \(liqueurList)\n"
+                        } else {
+                            message += "LIQUEUR: None\n"
                         }
                         
-                        return message + "\n----------------------------------\n"
+                        //Rim & Garnishes:
+                        message += "RIM: \(drink.rim)\n"
+                        if !drink.garnishes.isEmpty {
+                            let garnishText = drink.garnishes.joined(separator: ", ")
+                            message += "GARNISH: \(garnishText)\n"
+                        } else {
+                            message += "GARNISH: None\n"
+                        }
+                        
+                        //Notes:
+                        if !drink.notes.isEmpty {
+                            message += "NOTES: \(drink.notes)\n"
+                        } else {
+                            message += "NOTES: None\n"
+                        }
+                        
+                        return message + "\n-----------------------------------------\n"
                     }.joined(separator: "\n")
+                    
+                    
                     let LastMessage = """
-                        Check out my creations from SipBook!\u{1F378} Hope you like it :)
+                        Check out my creations from SipBook! Hope you like it :)\n
                         \(shareMessage)
                         """
-                    //ShareButton
+                    
+                    // Share button
                     ShareLink(
                         item: LastMessage,
-                        subject: Text ("My SipBook Creations\u{1F378}"),
-                        message:Text ("Check out my drink list made in SipBook") //Preview
-                    ){
-                            Label("\u{1F378} Share All Creations \u{1F378}", systemImage:"square.and.arrow.up")
-                                .font(.headline)
-                                .foregroundColor(.black)
-                        }
+                        subject: Text ("My SipBook Creations"),
+                    ) {
+                        Label("Share all creations", systemImage:"square.and.arrow.up")
+                            .font(.headline)
+                            .foregroundColor(Color(hex: "#0D0E10"))
+                    }
                 }
             }
                 
@@ -132,6 +156,16 @@ struct SettingsView: View {
         } catch {
             print("Failed to clear data: \(error.localizedDescription)")
         }
+    }
+    
+    // shot and part label for share view
+    // return 1 shot or 2 shots
+    private func shotLabel(for count: Int) -> String {
+        "\(count) shot" + (count == 1 ? "" : "s")
+    }
+    
+    private func partLabel(for count: Int) -> String {
+        "\(count) part" + (count == 1 ? "" : "s")
     }
 }
 
