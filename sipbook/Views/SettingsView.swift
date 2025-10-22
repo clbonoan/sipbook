@@ -10,9 +10,11 @@ import SwiftData
 
 struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
+    @Query private var drinks:[SavedDrink]
     @State private var showConfirmed = false
     @State private var showSuccess = false
     @State private var deletedCount = 0
+    
     
     // SETTINGS PAGE
     var body: some View {
@@ -30,7 +32,59 @@ struct SettingsView: View {
                             .foregroundColor(Color(hex: "#0D0E10"))
                     }
                 }
+                //The add on
+                Section{
+                    let shareMessage = drinks.map{drink -> String in
+                        var message = "\u{1F378}\(drink.name)\n"
+                        //Base:
+                        if !drink.spirits.isEmpty {
+                            let baseList = drink.spirits.map { spirit in
+                                " \u{2022}\(spirit) (\(drink.shotsPerSpirit[spirit] ?? 1), shots)"
+                            }.joined(separator: ", ")
+                            message += " Base: \(baseList)\n"
+                        }
+                        //Mixer:
+                        if !drink.mixers.isEmpty {
+                            let mixerList = drink.mixers.map { mixer in
+                                "\u{2022}\(mixer) (\(drink.partsPerMixer[mixer] ?? 1), parts)"
+                            }.joined(separator: ", ")
+                            message += " Mixer: \(mixerList)\n"
+                        }
+                        //Liqueur:
+                        if !drink.liqueurs.isEmpty {
+                            let liqueurList = drink.liqueurs.map { liqueur in
+                                "\u{2022}\(liqueur)(\(drink.partsPerLiqueur[liqueur] ?? 1), parts)"
+                            }.joined(separator: ", ")
+                            message += " Liqueurs: \(liqueurList)\n"
+                        }
+                        //Rim & Garnishes:
+                        if !drink.garnishes.isEmpty {
+                            message += " Rim & Garnishes: \(drink.garnishes)\n"
+                        }
+                        //Notes:
+                        if !drink.notes.isEmpty {
+                            message += " Notes: \(drink.notes)\n"
+                        }
+                        
+                        return message + "\n----------------------------------\n"
+                    }.joined(separator: "\n")
+                    let LastMessage = """
+                        Check out my creations from SipBook!\u{1F378} Hope you like it :)
+                        \(shareMessage)
+                        """
+                    //ShareButton
+                    ShareLink(
+                        item: LastMessage,
+                        subject: Text ("My SipBook Creations\u{1F378}"),
+                        message:Text ("Check out my drink list made in SipBook") //Preview
+                    ){
+                            Label("\u{1F378} Share All Creations \u{1F378}", systemImage:"square.and.arrow.up")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                        }
+                }
             }
+                
             .scrollContentBackground(.hidden)
             .background(.clear)
             .navigationTitle("Settings")

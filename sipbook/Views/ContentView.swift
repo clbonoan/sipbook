@@ -45,7 +45,8 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \SavedDrink.updatedAt, order: .reverse)
     private var drinks: [SavedDrink]
-
+    @State private var moveRight = false
+    
     // TITLE PAGE
     var body: some View {
         NavigationStack {
@@ -58,7 +59,21 @@ struct ContentView: View {
                         .foregroundColor(Color(hex: "#F8FAFA"))
                         .navigationBarBackButtonHidden(true)
                         .padding(.bottom, -60)
+                    //The Add on
                     Image("drinkoutline")
+                        .padding(.bottom, -60)
+                        .offset(x: moveRight ? 50 : -50)//moves right then back again
+                        .opacity(1)
+                         //wanted the movement to resemeble train motion
+                        .animation(.easeInOut(duration:6).repeatForever(autoreverses:true),value: moveRight)
+                        
+                        .onAppear{
+        //This makes sure the movment starts when photo fully appears- had a stimulation freeze
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3){
+                            //0.3 gives it a slight delay before it starts
+                                moveRight = true
+                            }
+                        }
                     // after clicking get started, show nav bar
                     NavigationLink(destination: AppTabsView()) {
                         Text("Get Started")
@@ -68,14 +83,14 @@ struct ContentView: View {
                             .background(Color(hex: "#F8FAFA"))
                             .foregroundColor(Color(hex: "#282728"))
                             .cornerRadius(10)
-                            
+                        
                     }
                 }
+               
             }
         }
     }
 }
-
 #Preview {
     ContentView()
         .modelContainer(for: SavedDrink.self, inMemory: true)
