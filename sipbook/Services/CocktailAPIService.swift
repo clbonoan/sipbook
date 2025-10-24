@@ -7,6 +7,7 @@
 
 import Foundation
 
+// data model for cocktails
 struct CocktailAPIService: Codable, Hashable {
     let name: String
     let ingredients: [String]

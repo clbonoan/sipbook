@@ -11,12 +11,13 @@ import SwiftUI
 // will be using this for the search bar and picker
 // CaseIterable lets you iterate over all cases of the enum
 // Identifiable lets you use the enum as the identifier for the picker’s selections
-enum DrinkKind: String, CaseIterable, Identifiable { 
+enum DrinkKind: String, CaseIterable, Identifiable {
     case cocktail = "Cocktail"
     case mocktail = "Mocktail"
     var id: String {rawValue}
 }
 
+// data model for preset drinks
 struct PresetDrink: Identifiable, Hashable {
     let id = UUID()
     let name: String
@@ -35,7 +36,7 @@ struct PresetDrinksView: View {
         GridItem(.flexible(), spacing: 20)
     ]
     
-    // presets
+    // PresetDrink data model presets
     private let allPresets: [PresetDrink] = [
         .init(name: "Margarita", kind: .cocktail, imageName: "margarita"),
         .init(name: "Mojito", kind: .cocktail, imageName: "mojito"),

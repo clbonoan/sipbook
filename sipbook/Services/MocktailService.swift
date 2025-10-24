@@ -7,7 +7,7 @@
 
 import Foundation
 
-// data model from JSON file
+// data model for mocktails
 struct Mocktail: Codable {
     let name: String
     let ingredients: [String]
